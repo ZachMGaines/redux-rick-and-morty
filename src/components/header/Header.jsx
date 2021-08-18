@@ -5,7 +5,7 @@ import { useSelectedTheme, useSetSelectedTheme } from '../state/CharacterProvide
 
 
 const Header = () => {
-  const selectedTheme = useSelectedTheme();
+  // const selectedTheme = useSelectedTheme();
   const setSelectedTheme = useSetSelectedTheme();
 
 
