@@ -2,32 +2,47 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { fetchRickandMortyCharacters } from '../services/fetchRickandMortyCharacters';
 
+
 const CharacterContext = createContext();
 
 export const CharacterProvider = ({ children }) => {
   const [characters, setCharacters] = useState([]);
-  const [selectedTheme, setSelectedTheme] = useState('dark');
+  const [selectedApi, setSelectedApi] = useState('rickandmorty');
+  const [selectedTheme, setSelectedTheme] = useState('light');
+
+  const apiMap = {
+    rickandmorty: fetchRickandMortyCharacters,
+  };
+
 
   useEffect(() => {
-    fetchRickandMortyCharacters().then(setCharacters).then(setSelectedTheme);
-  }, []);
+    apiMap[selectedApi]().then(setCharacters);
+  }, [selectedApi]);
+
 
 
   return (
-    <CharacterContext.Provider value={{ characters, setSelectedTheme, selectedTheme }}>
+    <CharacterContext.Provider value={{ characters, setSelectedApi, apiMap, selectedTheme, setSelectedTheme }}>
       {children}
     </CharacterContext.Provider>
   );
 };
 
-export const useSelectedTheme = () => {
-  const { selectedTheme } = useContext(CharacterContext);
-  return selectedTheme;
-};
-
 export const useCharacters = () => {
   const { characters } = useContext(CharacterContext);
+  console.log('beans', characters);
   return characters;
+};
+
+export const useSetSelectedApi = () => {
+  const { setSelectedApi } = useContext(CharacterContext);
+  return setSelectedApi;
+};
+
+
+export const useSelectedApi = () => {
+  const { selectedApi } = useContext(CharacterContext);
+  return selectedApi;
 };
 
 export const useSetSelectedTheme = () => {
@@ -35,3 +50,7 @@ export const useSetSelectedTheme = () => {
   return setSelectedTheme;
 };
 
+export const useSelectedTheme = () => {
+  const { selectedTheme } = useContext(CharacterContext);
+  return selectedTheme;
+};
